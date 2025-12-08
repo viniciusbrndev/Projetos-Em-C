@@ -19,10 +19,10 @@ int main(){
   scanf("%s", nome);  
   if(buscaPalavra(matriz, nome, posLinha, &quantidade)){
     printf("\n%s aparece %d vezes!", nome, quantidade);
-    printf("\n%s aparece nas linhas:");
+    printf("\n%s aparece nas linhas:", nome);
   
     for(int i = 0; i < quantidade; i++){
-      printf("%d", posLinha[i]);
+      printf("%d, ", posLinha[i]);
     }
   }
   else
