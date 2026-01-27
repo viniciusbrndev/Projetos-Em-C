@@ -73,4 +73,4 @@ void listarNomespAnos(Pessoa vet[MAX], int q, int f){
       printf("\n%s", vet[i].nome);
     }
   }
-}
+} 
