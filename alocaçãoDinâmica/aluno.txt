@@ -1,0 +1,4 @@
+nome: Vini 2.3 100
+; nota: 0.00; frequência: 0
+nome: 
+; nota: 0.00; frequência: 0
