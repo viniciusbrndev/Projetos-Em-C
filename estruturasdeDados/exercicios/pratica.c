@@ -3,14 +3,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#include <string.h>
 struct time{
     Jogador **player;
     int nPlayers;
     char nomeTime[20];
     char conf;
 };
-
+struct aluno{
+    char nome[20];
+    float coe;
+    int ano;
+    int mat;
+};
+struct funcionario{
+    char nome[50];
+    int mat;
+    float horas;
+    float salario;
+    int nDep;
+};
 
 float maiorElemento(int i, float* v){
     if(i == 1)
@@ -121,7 +133,143 @@ void imprimeVetor(int *v, int n){
 void imprimeImpar(int *v, int n){
     if(n == 0)
         return;
-    if((v[0] % 2) == 0)
+    if((v[0] % 2))
         printf("%d ", v[0]);
     imprimeImpar(v +1, n -1);
+}
+void printTree(int n){
+    if(n == 0)
+        return;
+    printTree(n -1);
+    for(int i = 0; i < n; i++){
+        printf("* ");
+    }
+    printf("\n");
+}
+Aluno* criaAlunos(char *nomes,int *matriculas, float *coeficientes,int *anos, int n){
+    if(n <= 0)
+        return NULL;
+    Aluno* p = (Aluno*)malloc(sizeof(Aluno)*n);
+    if(!p)
+        return NULL;
+    char *token = strtok(nomes, " ");
+    for(int i = 0; i < n; i++){
+        p[i].ano = anos[i];
+        p[i].coe = coeficientes[i];
+        p[i].mat = matriculas[i];
+        strcpy(p[i].nome, token);
+        token = strtok(NULL, " ");
+    }
+    return p;
+}
+Aluno* destroiAluno(Aluno* alunos, int n){
+    if(alunos)
+        free(alunos);
+    return NULL;
+}
+float mediaCoeficientes(Aluno* alunos, int n, int ano){
+    if(alunos && n && ano){
+        int cont =0;
+        float soma = 0;
+        for(int i = 0; i < n; i++){
+            if(alunos[i].ano <= ano){
+                soma += alunos[i].coe;
+                cont++;
+            }
+        }
+        return soma / cont;
+    }
+    return -1;//código de erro
+}
+void imprimeAlunos(Aluno* alunos, int n){
+    if(n == 0 || !alunos)
+        return;
+    if(!(alunos[0].mat % 2)){
+        printf("\n%s", alunos[0].nome);
+    }
+    imprimeAlunos(alunos +1, n -1);
+}
+void imprimeMatriz(int **mat, int lin,int cols, int i){
+    if(i >= lin)
+        return;
+    for(int j = 0; j < cols; j++){
+        printf("%d ", mat[i][j]);
+    }
+    printf("\n");
+    imprimeMatriz(mat, lin, cols, i+1);
+}
+
+void cripCesar(char *c, int chave){
+    if(c[0] == '\0')
+        return;
+    if(c[0] +chave >= 'z')
+        c[0] = 'a'+chave;
+    else
+        c[0] = c[0] +chave;
+    cripCesar(c+1, chave);
+}
+
+Funcionario* alocaFuncionarios(int n){
+    if(n){
+        Funcionario* p = (Funcionario*)malloc(sizeof(Funcionario)*n);
+        if(p)
+            return p;
+    }
+    return NULL;
+}
+void calculaSalario(Funcionario* p, int n){
+    if(p && n){
+        for(int i = 0; i < n; i++){
+            p[i].salario = ((p[i].horas *12) +(40 * p[i].nDep)) *0,865;
+            printf("\nNome: %s, Salário: %f", p[i].nome,p[i].salario);
+        }
+    }
+}
+long int pot(int n, int a){
+    if(n == 1)
+        return 1;
+    return a * pot(n -1, a);
+}
+void removeLetra(char *c,char a, int str_len){
+    if(str_len < 0)
+        return;
+    if(c[str_len-1] == 'a')
+        c[str_len-1] = ' ';
+    removeLetra(c, a, str_len-1);
+}
+long int somaAbaixoDiagonal(int **mat, int n, int i, int j){
+    if(i == n)
+        return 0;
+    if(j == i)
+        return somaAbaixoDiagonal(mat, n, i+1, 0);
+    return mat[i][j] + somaAbaixoDiagonal(mat, n, i,j+1);
+}
+long int multDiagonal(int **mat,int n, int i){
+    if(i == n)
+        return 1;
+    if(mat[i][i] == 0)
+        return multDiagonal(mat, n, i+1);
+    return mat[i][i] * multDiagonal(mat, n, i+1);
+    }
+void escadaInvertida(int n){
+    if(n == 0)
+        return;
+    for(int j = n; j > 0; j--){
+        printf("%d ", j);
+    }
+    printf("\n");
+    escadaInvertida(n-1);
+}
+int somaVetor(int *v, int n){
+    if(n == 0)
+        return 0;
+    return v[0] + somaVetor(v+1, n-1);
+}
+void intercalaVetores(int *v1, int *v2, int *vRes, int n){
+    if(n == 0)
+        return;
+    vRes[0] = v1[0];
+    vRes[1] = v2[0];
+    intercalaVetores(v1+1, v2+1, vRes+2, n-1);
+
 }
