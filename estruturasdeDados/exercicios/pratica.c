@@ -23,6 +23,12 @@ struct funcionario{
     float salario;
     int nDep;
 };
+struct carro{
+    Rodas *rodas;
+    char nome[20];
+    int cor;
+    int nRodas;
+};
 
 float maiorElemento(int i, float* v){
     if(i == 1)
@@ -272,4 +278,61 @@ void intercalaVetores(int *v1, int *v2, int *vRes, int n){
     vRes[1] = v2[0];
     intercalaVetores(v1+1, v2+1, vRes+2, n-1);
 
+}
+Carro* alocaCarro(int qtdRodas){
+    Carro *p = (Carro*)malloc(sizeof(Carro));
+    if(p){
+        p->nRodas = qtdRodas;
+        p->rodas = alocaRodas(qtdRodas);
+        if(!p->rodas){
+            free(p);
+            return NULL;
+        }
+        return p;
+    }
+    return NULL;
+}
+void desalocaCarro(Carro **carro){
+    if(!carro)
+        return;
+    desalocaRodas(&(*carro)->rodas);
+    free(*carro);
+    *carro = NULL;
+}
+void imprimeRodas(Carro* c){
+    char nome[30];
+    int psi;
+    for(int i = 0; i < c->nRodas; i++){
+        getRoda(&c->rodas[i], nome, &psi);
+        printf("Marca roda %d: %s Pressão: %d\n",i+1, nome, psi);
+    }   
+}
+int quantidadeRodas(Carro* car, char c){
+    int cont = 0;
+    int temp;
+    char nome[30];
+    for(int i =0; i < car->nRodas; i++){
+        getRoda(&car->rodas[i],nome, &temp);
+        if(nome[0] == c)
+            cont++;
+    }
+
+}
+void triangulo(int n){
+    if(n == 0)
+        return;
+    triangulo(n-1);
+    for(int i = 0; i < n; i++){
+        printf("* ");
+    }
+    printf("\n");
+}
+void trianguloInverso(int n){
+    if(n == 0)
+        return;
+    for(int i = 0; i < n; i++){
+        printf("* ");
+    }
+    printf("\n");
+    trianguloInverso(n-1);
 }
