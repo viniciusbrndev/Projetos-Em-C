@@ -7,6 +7,7 @@
 #include <stdbool.h>
 
 typedef struct lista Lista;
+typedef struct pilha Pilha;
 
 typedef struct item{
     int chave;
