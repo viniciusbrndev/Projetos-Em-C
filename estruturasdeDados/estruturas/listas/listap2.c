@@ -10,6 +10,10 @@ struct celula{
 struct lista{
     Celula *cabeca;
 };
+
+struct pilha{
+    Celula* topo;
+};
 typedef struct fila{
     int tam;
     int *itens;
@@ -47,10 +51,12 @@ void moveElemento(Lista *p, int chave){
     if(!p)
         return;
     Celula *ant, *aux;
-    ant = p->cabeca->prox;
-    while(ant->chave != chave)
-        ant = ant->prox;
-    aux = ant->prox;
+    ant = p->cabeca;
+    aux = p->cabeca->prox;
+    while(aux->chave != chave){
+        ant = aux;
+        aux = aux->prox;
+    }
     ant->prox = aux->prox;
     aux->prox = p->cabeca->prox;
     p->cabeca->prox = aux;
@@ -151,6 +157,104 @@ bool FilaDesenfileira(Fila* p, int *pItem){
     p->n--;
     return true;
 }
+void imprimeCel(Celula *p){
+    if(!p)
+        return;
+    printf("%d ", p->chave);
+    imprimeCel(p->prox);
+}
 void imprimeLista(Lista *pLista){
-    //if();
+    if(!pLista)
+        return;
+    imprimeCel(pLista->cabeca->prox);
+}
+void dumbSort(Lista* pLista){
+    if(!pLista)
+        return;
+    Celula* aux = pLista->cabeca->prox;
+    Celula *ant = pLista->cabeca;
+    while(aux && aux->prox){
+        if(aux->chave < aux->prox->chave && aux->chave < ant->chave){
+            ant->prox = aux->prox;
+            free(aux);
+            aux = ant->prox;
+            continue;
+        }
+        ant = aux;
+        aux = aux->prox;
+    }
+    /*
+        MÉTODO INVÁLIDO POIS NÃO ORDENA DE VERDADE SÓ REMOVE VALES
+        SE ant > aux < aux->prox
+            REMOVE
+    */
+}
+
+Pilha* PilhaALoca(){
+    Pilha* ptemp = malloc(sizeof(Pilha));
+    if(ptemp){
+        ptemp->topo = malloc(sizeof(Celula));
+        if(!ptemp->topo){
+            free(ptemp);
+            return NULL;
+        }
+        ptemp->topo->chave = 0;
+        ptemp->topo->prox = NULL;
+    }
+    return ptemp;
+}
+bool PilhaEhVazia(Pilha *pPilha){
+    if(!pPilha || !pPilha->topo->prox)
+        return true;
+    else
+        return false;
+}
+bool pilhaPop(Pilha* pPilha, int *item){
+    if(!pPilha || !pPilha->topo->prox)
+        return false;
+    Celula *aux = pPilha->topo->prox;
+    if(!aux->prox){
+        *item = aux->chave;
+        free(aux);
+        return true;
+    }
+    *item = aux->chave;
+    pPilha->topo->prox = aux->prox;
+    free(aux);
+    return true;
+}
+bool PilhaPush(Pilha *pPilha, int n){
+    if(!pPilha)
+        return false;
+    Celula * novo = malloc(sizeof(Celula));
+    if(!novo)
+        return false;
+
+    novo->chave = n;
+    novo->prox = pPilha->topo->prox;
+    pPilha->topo->prox = novo;
+
+    return true;
+}
+int PilhaTamnho(Pilha* p){
+    if(!p)
+        return 0;
+    int cont = 0;
+    Celula *aux = p->topo->prox;
+    while(aux){
+        cont++;
+        aux = aux->prox;
+    }
+    return cont;
+}
+//O(n)
+Pilha* PilhaFree(Pilha *p){
+    if(!p)
+        return NULL;
+    int temp;
+    while(!PilhaEhVazia(p))
+        pilhaPop(p, &temp);
+    free(p->topo);
+    free(p);
+    return NULL;
 }
