@@ -292,3 +292,98 @@ int filaDesenfileira(Fila *fila, int *item){
     fila->n--;
     return 1;
 }
+bool listaTemNumRepetidos(Lista* plista){
+    if(!plista)
+        return false;
+    
+    Celula* aux, *frente;
+    aux = plista->cabeca->prox;
+    frente = aux->prox;
+    if(!aux)
+        return false;
+    int i = 1, j = 1;
+    while(aux){
+        while(frente){
+            if(aux->chave == frente->chave)
+                printf("%d - %d, %d\n",i, aux->chave, j);
+            j++;
+            frente = frente->prox;
+        }
+        i++;
+        aux = aux->prox;
+        j = 0;
+        frente = aux->prox;
+    }
+    return true;
+}
+bool filaEhVazia(Fila *p){
+    if(!p || p->n == 0)
+        return true;
+    return false;
+}
+int filaTamanho(Fila* fila){
+    if(!fila)
+        return 0;
+    return fila->tam;
+}
+bool listaTrocaParte(Lista *p, int pos){
+    if(!p || pos <= 0)
+        return false;
+    Celula *aux, *ant;
+    
+    aux = p->cabeca->prox;
+    ant = aux->prox; 
+    for(int i = 0; i < pos; i++){
+        ant = aux;
+        aux = aux->prox;
+    }
+    ant->prox = aux->prox;
+    aux->prox = p->cabeca->prox;
+    p->cabeca->prox = aux;
+    
+    return true;
+}
+bool filaIntercala(Fila *fila1, Fila *fila2, Fila* resultado){
+    if(!fila1 || !fila2 || !resultado)
+        return false;
+    
+    int item;
+    while(!filaEhVazia(fila2) && !filaEhVazia(fila2)){
+        filaDesenfileira(fila1, &item);
+        filaEnfileira(resultado, item);
+
+        filaDesenfileira(fila2, &item);
+        FilaEnfileira(resultado, item);
+    }
+    while(!filaEhVazia(fila1)){
+        filaDesenfileira(fila1, &item);
+        filaEnfileira(resultado, item);
+    }
+    while(!filaEhVazia(fila2)){
+        filaDesenfileira(fila2, &item);
+        FilaEnfileira(resultado, item);
+    }
+    return true;
+}
+Fila* filaInverte(Fila *p){
+    if(!p)
+        return NULL;
+    Fila* filaAux;
+    int item;
+    filaInicia(&filaAux, filaTamanho(p));
+    if(!filaAux)
+        return NULL;
+    for(int i = filaTamanho(p); i > 0; i--){
+        for(int j = 0; j < i-1; j++){
+            filaDesenfileira(p, &item);
+            filaEnfileira(filaAux, item);
+        }
+        filaDesenfileira(p, item);
+        filaEnfileira(filaAux,  item);
+    }
+    while(!filaEhVazia(filaAux)){
+        filaDesenfileira(filaAux, &item);
+        filaEnfileira(p, item);
+    }
+    
+}
