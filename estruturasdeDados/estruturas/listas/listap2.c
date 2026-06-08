@@ -258,3 +258,37 @@ Pilha* PilhaFree(Pilha *p){
     free(p);
     return NULL;
 }
+int filaInicia(Fila** fila, int tam){
+    if(tam <= 0)
+        return 0;
+    *fila = malloc(sizeof(Fila));
+    if(*fila){
+        (*fila)->itens = malloc(sizeof(int)*tam);
+        if(!(*fila)->itens){
+            free(*fila);
+            return 0;
+        }
+        (*fila)->tam = tam;
+        (*fila)->fim = 0;
+        (*fila)->ini = 0;
+        (*fila)->n = 0;
+        return 1;
+    }
+    return 0;
+}
+int filaEnfileira(Fila *fila, int item){
+    if(!fila || fila->tam == fila->n)
+        return 0;
+    fila->itens[fila->fim] = item;
+    fila->fim = (fila->fim +1) % fila->tam;
+    fila->n++;
+    return 1;
+}
+int filaDesenfileira(Fila *fila, int *item){
+    if(!fila || !item)
+        return 0;
+    *item = fila->itens[fila->ini];
+    fila->ini = (fila->ini +1) % fila->tam;
+    fila->n--;
+    return 1;
+}
