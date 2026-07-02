@@ -387,3 +387,39 @@ Fila* filaInverte(Fila *p){
     }
     
 }
+void filaImprime(Fila *p){
+    if(!p || p->n == 0){
+        printf("Fila vazia!");
+        return;
+    }
+    printf("Fila: ");
+    int atual = p->ini;
+    for(int i = 0; i < p->n; i++){
+        printf("%d ", p->itens[atual]);
+        atual = (atual + 1) % p->tam;
+    }
+
+}
+void filaRec(Fila *p, int atual, int n){
+    if(!n)
+        return;
+    printf("%d ", p->itens[atual]);
+    int prox = (atual +1) % p->tam;
+    filaRec(p, prox, n--);
+}
+void filaImprimeRec(Fila *p){
+    if(!p || p->n == 0){
+        printf("Fila vazia!");
+        return;
+    }
+    printf("Fila: ");
+    filaRec(p, p->ini, p->n);
+    printf("\n");
+}
+void filaEspelho(Fila *fila){
+    if(!fila)
+        return;
+    filaImprime(fila);
+    filaInverte(fila);
+    filaImprime(fila);
+}

@@ -97,3 +97,32 @@ void InsertionSort(Item *v, int n, Analise *a) {
         v[j+1] = aux; 
     }
 }
+
+//HEAP
+void HeapRefaz(Item *v, int dir, int esq){
+    Item aux = v[esq];
+    int i = esq; // pai
+    int j = 2 * i +1; // filho da esquerda
+
+    while(j <= dir){ //tem filho na esquerda
+        if(j < dir) // tem filhos na direita
+            if(ItemCompara(v[j +1], v[j]) == MAIOR)
+                j++;
+        //se o pai tem mais prioridade para
+        if(ItemCompara(v[j], aux) == MENOR)
+            break;
+
+        v[i] = v[j];
+        i = j;
+        j = 2 * i +1;
+    }
+    v[i] = aux;
+}
+void HeapConstroi(Item *v, int n){
+    int esq = (n / 2) -1;
+    while(esq >= 0){
+        HeapRefaz(v, n-1, esq);
+        esq--;
+    }
+}
+void HeapSort(){}
